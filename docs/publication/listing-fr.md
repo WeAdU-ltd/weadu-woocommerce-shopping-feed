@@ -14,7 +14,7 @@ Vérifie les champs produits WooCommerce utilisés par un flux Google Shopping e
 
 WeAdU Shopping Feed Check lit vos produits WooCommerce publiés et liste, pour chacun, les problèmes que Google Shopping signalerait probablement.
 
-Erreurs : identifiant, titre, description, lien, image, disponibilité ou prix vides ; titre de plus de 150 caractères ; description de plus de 5 000 caractères ; lien ou image qui ne commence pas par http:// ou https:// ; prix nul ou négatif ; GTIN dont la longueur ou la clé de contrôle est fausse ; identifiant en double.
+Erreurs : identifiant, titre, description, lien, image, disponibilité ou prix vides ; titre de plus de 150 caractères ; description de plus de 5 000 caractères ; lien ou image qui ne commence pas par http:// ou https:// ; prix nul ; GTIN dont la longueur ou la clé de contrôle est fausse ; identifiant en double.
 
 Avertissements : titre de moins de 15 caractères, tout en capitales ou avec une formule promotionnelle comme « livraison gratuite » ou « soldes » ; prix sans code devise ; marque vide ; GTIN et MPN vides ; état vide ou inconnu.
 
