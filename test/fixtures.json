@@ -1,0 +1,217 @@
+{
+  "utm": [
+    {
+      "name": "required fields",
+      "input": {
+        "url": "https://shop.example/p",
+        "source": "google",
+        "medium": "cpc",
+        "campaign": "spring"
+      },
+      "ok": true,
+      "url": "https://shop.example/p?utm_source=google&utm_medium=cpc&utm_campaign=spring"
+    },
+    {
+      "name": "keeps other params and fragment",
+      "input": {
+        "url": "https://shop.example/p?color=blue#size",
+        "source": "Google",
+        "medium": "CPC",
+        "campaign": "Spring",
+        "content": "shirt",
+        "term": "cotton"
+      },
+      "ok": true,
+      "url": "https://shop.example/p?color=blue&utm_source=google&utm_medium=cpc&utm_campaign=spring&utm_content=shirt&utm_term=cotton#size"
+    },
+    {
+      "name": "replaces existing utm",
+      "input": {
+        "url": "https://shop.example/p?utm_source=old&ref=1",
+        "source": "google",
+        "medium": "cpc",
+        "campaign": "spring"
+      },
+      "ok": true,
+      "url": "https://shop.example/p?ref=1&utm_source=google&utm_medium=cpc&utm_campaign=spring"
+    },
+    {
+      "name": "spaces rejected",
+      "input": {
+        "url": "https://shop.example/p",
+        "source": "google ads",
+        "medium": "cpc",
+        "campaign": "spring"
+      },
+      "ok": false,
+      "codes": ["utm_value_invalid"]
+    },
+    {
+      "name": "missing campaign",
+      "input": {
+        "url": "https://shop.example/p",
+        "source": "google",
+        "medium": "cpc",
+        "campaign": ""
+      },
+      "ok": false,
+      "codes": ["utm_campaign_required"]
+    },
+    {
+      "name": "javascript url",
+      "input": {
+        "url": "javascript:alert(1)",
+        "source": "google",
+        "medium": "cpc",
+        "campaign": "spring"
+      },
+      "ok": false,
+      "codes": ["url_protocol"]
+    }
+  ],
+  "items": [
+    {
+      "name": "complete",
+      "item": {
+        "id": "1",
+        "title": "Acme Cotton Shirt",
+        "description": "A cotton shirt for everyday wear.",
+        "link": "https://shop.example/p/1",
+        "image_link": "https://shop.example/i/1.jpg",
+        "availability": "in_stock",
+        "price": "29.00 EUR",
+        "brand": "Acme",
+        "gtin": "4006381333931",
+        "mpn": "",
+        "condition": "new",
+        "identifier_exists": ""
+      },
+      "codes": []
+    },
+    {
+      "name": "missing gtin and mpn",
+      "item": {
+        "id": "2",
+        "title": "Acme Cotton Shirt",
+        "description": "A cotton shirt for everyday wear.",
+        "link": "https://shop.example/p/2",
+        "image_link": "https://shop.example/i/2.jpg",
+        "availability": "in stock",
+        "price": "EUR 29.00",
+        "brand": "Acme",
+        "gtin": "",
+        "mpn": "",
+        "condition": "new",
+        "identifier_exists": ""
+      },
+      "codes": ["missing_gtin"]
+    },
+    {
+      "name": "identifier exists no",
+      "item": {
+        "id": "3",
+        "title": "Acme Cotton Shirt",
+        "description": "A cotton shirt for everyday wear.",
+        "link": "https://shop.example/p/3",
+        "image_link": "https://shop.example/i/3.jpg",
+        "availability": "out_of_stock",
+        "price": "29,00 EUR",
+        "brand": "Acme",
+        "gtin": "",
+        "mpn": "",
+        "condition": "new",
+        "identifier_exists": "no"
+      },
+      "codes": []
+    },
+    {
+      "name": "bad gtin",
+      "item": {
+        "id": "4",
+        "title": "Acme Cotton Shirt",
+        "description": "A cotton shirt for everyday wear.",
+        "link": "https://shop.example/p/4",
+        "image_link": "https://shop.example/i/4.jpg",
+        "availability": "preorder",
+        "price": "12.50 GBP",
+        "brand": "Acme",
+        "gtin": "4006381333932",
+        "mpn": "AC-1",
+        "condition": "refurbished",
+        "identifier_exists": ""
+      },
+      "codes": ["gtin_invalid"]
+    },
+    {
+      "name": "zero price",
+      "item": {
+        "id": "5",
+        "title": "Acme Cotton Shirt",
+        "description": "A cotton shirt for everyday wear.",
+        "link": "https://shop.example/p/5",
+        "image_link": "https://shop.example/i/5.jpg",
+        "availability": "backorder",
+        "price": "0.00 EUR",
+        "brand": "Acme",
+        "gtin": "036000291452",
+        "mpn": "",
+        "condition": "used",
+        "identifier_exists": ""
+      },
+      "codes": ["price_not_positive"]
+    },
+    {
+      "name": "promotional capitals",
+      "item": {
+        "id": "6",
+        "title": "FREE SHIPPING SALE EVENT",
+        "description": "A cotton shirt for everyday wear.",
+        "link": "https://shop.example/p/6",
+        "image_link": "https://shop.example/i/6.jpg",
+        "availability": "in_stock",
+        "price": "19.00 EUR",
+        "brand": "Acme",
+        "gtin": "96385074",
+        "mpn": "",
+        "condition": "new",
+        "identifier_exists": ""
+      },
+      "codes": ["title_all_caps", "title_promotional"]
+    },
+    {
+      "name": "short title",
+      "item": {
+        "id": "7",
+        "title": "Hat",
+        "description": "A cotton hat for everyday wear.",
+        "link": "https://shop.example/p/7",
+        "image_link": "https://shop.example/i/7.jpg",
+        "availability": "in_stock",
+        "price": "19.00",
+        "brand": "Acme",
+        "gtin": "4006381333931",
+        "mpn": "",
+        "condition": "new",
+        "identifier_exists": ""
+      },
+      "codes": ["price_currency_missing", "title_too_short"]
+    }
+  ],
+  "titles": [
+    {
+      "name": "prefix brand",
+      "item": { "title": "Cotton Shirt", "brand": "Acme" },
+      "suggested": "Acme Cotton Shirt"
+    },
+    {
+      "name": "brand already present",
+      "item": { "title": "Acme Cotton Shirt", "brand": "acme" },
+      "suggested": ""
+    },
+    {
+      "name": "brand only",
+      "item": { "title": "", "brand": "Acme" },
+      "suggested": "Acme"
+    }
+  ]
+}
