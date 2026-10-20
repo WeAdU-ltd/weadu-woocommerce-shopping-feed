@@ -6,6 +6,7 @@ P=weadu-shopping-feed/weadu-shopping-feed.php
 find . -name "*.php" -not -path "./.git/*" -print0 | xargs -0 -n1 php -l >/dev/null
 node --test test/
 php test/csv_test.php
+php test/plugin_test.php
 ! grep -n "weadu_sf_t" "$P"
 grep -q "declare_compatibility('custom_order_tables'" "$P"
 grep -q "License: GPLv2 or later" "$P"
