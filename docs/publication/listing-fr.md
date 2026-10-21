@@ -18,6 +18,6 @@ Erreurs : identifiant, titre, description, lien, image, disponibilité ou prix v
 
 Avertissements : titre de moins de 15 caractères, tout en capitales ou avec une formule promotionnelle comme « livraison gratuite » ou « soldes » ; prix sans code devise ; marque vide ; GTIN et MPN vides ; état vide ou inconnu.
 
-L'extension propose aussi un titre qui commence par la marque quand celle-ci n'apparaît pas dans le titre, peut ajouter vos paramètres UTM aux liens vérifiés et exporte le résultat en CSV. L'interface est en français et en anglais.
+L'extension propose aussi un titre qui commence par la marque quand celle-ci n'apparaît pas dans le titre et exporte le résultat en CSV. L'interface est en français et en anglais.
 
 L'extension n'appelle ni Google, ni Merchant Center, ni aucun autre service, n'envoie aucune donnée et ne modifie pas vos produits. Un produit sans constat n'est pas validé pour autant par Google.

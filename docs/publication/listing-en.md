@@ -22,6 +22,6 @@ Errors: empty id, title, description, link, image, availability, or price; title
 
 Warnings: title under 15 characters, all in capitals, or with promotional wording such as "free shipping" or "sale"; price without a currency code; empty brand; empty GTIN and MPN; empty or unknown condition.
 
-It also suggests a title that starts with the brand when the brand is missing from the title, can add your UTM parameters to the links it checks, and exports the result as a CSV file. The interface is in English and French.
+It also suggests a title that starts with the brand when the brand is missing from the title, and exports the result as a CSV file. The interface is in English and French.
 
 The plugin does not call Google, Merchant Center, or any other service, sends no data, and does not modify your products. A product with no finding is not an approval from Google.

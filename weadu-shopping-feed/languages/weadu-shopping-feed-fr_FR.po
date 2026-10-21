@@ -21,9 +21,6 @@ msgstr "Enregistrer"
 msgid "Run check"
 msgstr "Lancer le contrôle"
 
-msgid "UTM values were not saved. Use letters, digits, and . _ ~ - with no spaces."
-msgstr "Valeurs UTM non enregistrées. Lettres, chiffres, et . _ ~ - , sans espace."
-
 msgid "Settings saved."
 msgstr "Réglages enregistrés."
 

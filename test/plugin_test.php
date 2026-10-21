@@ -58,8 +58,8 @@ $GLOBALS['wp']['caps'] = array('manage_options' => true, 'manage_woocommerce' =>
 // --- settings -----------------------------------------------------------------
 $GLOBALS['wp']['options'] = array('weadu_sf_source' => '"><b>x');
 $html = page();
-check('page shows the settings form with a nonce', contains($html, 'name="weadu_sf_source"') && contains($html, 'nonce-weadu_sf_settings'));
-check('stored values are escaped', contains($html, '&quot;&gt;&lt;b&gt;x') && !contains($html, '"><b>x'));
+check('page shows the settings form with a nonce', contains($html, 'name="weadu_sf_limit"') && contains($html, 'nonce-weadu_sf_settings'));
+check('page has no UTM field', !contains($html, 'weadu_sf_source') && !contains($html, 'utm_'));
 check('default limit is 200', contains($html, 'value="200"'));
 check('page says it does not call Google', contains($html, 'It does not call Google.'));
 
@@ -68,13 +68,10 @@ $_POST = array('weadu_sf_settings' => '1', 'weadu_sf_source' => 'google ads', 'w
 $GLOBALS['wp']['nonces_checked'] = array();
 $html = page();
 check('saving checks the nonce', $GLOBALS['wp']['nonces_checked'] === array('weadu_sf_settings'));
-check('invalid UTM value is refused', contains($html, 'UTM values were not saved.'));
-check('invalid UTM value is not stored', get_option('weadu_sf_source') === '"><b>x');
 
 $_POST = array('weadu_sf_settings' => '1', 'weadu_sf_source' => ' google ', 'weadu_sf_medium' => 'cpc', 'weadu_sf_campaign' => 'spring', 'weadu_sf_limit' => '9999');
 $html = page();
 check('valid settings are saved', contains($html, 'Settings saved.'));
-check('UTM source is trimmed', get_option('weadu_sf_source') === 'google');
 check('limit is capped at 500', get_option('weadu_sf_limit') === '500');
 $_POST['weadu_sf_limit'] = '-3';
 page();
@@ -93,22 +90,22 @@ check('findings are listed with severity', contains($html, 'error: price is empt
 check('CSV link carries a nonce', contains($html, 'admin-post.php?action=weadu_sf_csv&amp;_wpnonce=nonce-weadu_sf_csv'));
 
 $products = weadu_products();
-$a = weadu_sf_map_product($products[0], 'EUR', 'google', 'cpc', 'spring');
-check('link carries the saved UTM values', $a['link'] === 'https://shop.example/product/shirt/?utm_source=google&utm_medium=cpc&utm_campaign=spring', $a['link']);
+$a = weadu_sf_map_product($products[0], 'EUR');
+check('link is the product permalink, without UTM', $a['link'] === 'https://shop.example/product/shirt/', $a['link']);
 check('global unique id is used as GTIN', $a['gtin'] === '4006381333931');
 check('brand comes from the product_brand taxonomy', $a['brand'] === 'Acme');
 check('price is formatted with the currency', $a['price'] === '29.00 EUR');
 check('condition defaults to new', $a['condition'] === 'new');
 check('image URL comes from the attachment', $a['image_link'] === 'https://shop.example/wp-content/uploads/shirt.jpg');
-$b = weadu_sf_map_product($products[1], 'EUR', '', '', '');
+$b = weadu_sf_map_product($products[1], 'EUR');
 check('short description is used when the description is empty', $b['description'] === 'Short text.');
 check('_ean meta is used as GTIN', $b['gtin'] === '4006381333932');
 check('_brand meta is the last brand fallback', $b['brand'] === 'MetaBrand');
 check('_mpn and _condition meta are read', $b['mpn'] === 'H-1' && $b['condition'] === 'used');
 check('empty price stays empty', $b['price'] === '');
 check('out of stock is reported', $b['availability'] === 'out_of_stock');
-check('link has no UTM when settings are empty', $b['link'] === 'https://shop.example/product/hat/');
-$c = weadu_sf_map_product($products[2], 'GBP', '', '', '');
+check('second link has no UTM either', $b['link'] === 'https://shop.example/product/hat/');
+$c = weadu_sf_map_product($products[2], 'GBP');
 check('pa_brand attribute is the second brand fallback', $c['brand'] === 'AttrBrand');
 check('_gtin meta is used as GTIN', $c['gtin'] === '96385074');
 check('decimal price is padded', $c['price'] === '9.90 GBP');
