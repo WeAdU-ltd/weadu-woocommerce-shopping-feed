@@ -4,6 +4,7 @@
  */
 error_reporting(E_ALL);
 set_error_handler(function ($no, $msg) { fwrite(STDERR, "PHP notice: $msg\n"); exit(1); });
+require __DIR__ . '/wp_parse_url.php';
 require __DIR__ . '/../weadu-shopping-feed/includes/FeedAudit.php';
 $report = array('items' => array(
     array('id' => '=HYPERLINK("x")', 'title' => '+cmd', 'suggestedTitle' => '@a', 'findings' => array()),

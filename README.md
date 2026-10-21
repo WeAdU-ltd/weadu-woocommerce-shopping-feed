@@ -84,3 +84,8 @@ sh test.sh   # PHP syntax check, shared logic tests, and plugin tests (PHP and N
 ## About
 
 Made by [WeAdU](https://weadu.com). WeAdU is not affiliated with WordPress, WooCommerce, or Google.
+
+## Notes for maintainers
+
+- `weadu-shopping-feed/languages/weadu-shopping-feed-fr_FR.po` is kept as a seed for translate.wordpress.org. No `.mo` is shipped: WordPress.org builds and loads translations for the `weadu-shopping-feed` slug itself.
+- `weadu-shopping-feed/includes/FeedAudit.php` diverges from the PrestaShop copy (WeAdU-ltd/weadu-prestashop-shopping-feed): it uses `wp_parse_url()` instead of `parse_url()`, carries `phpcs:ignore` comments for the in-memory `php://temp` stream, and has a GPL license header. Port rule changes to both copies by hand.

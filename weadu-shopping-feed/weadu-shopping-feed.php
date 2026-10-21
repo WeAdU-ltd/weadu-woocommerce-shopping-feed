@@ -22,7 +22,6 @@ if (!defined('ABSPATH')) {
 require_once __DIR__ . '/includes/FeedAudit.php';
 
 add_action('before_woocommerce_init', 'weadu_sf_declare_hpos');
-add_action('init', 'weadu_sf_load_textdomain');
 add_action('admin_menu', 'weadu_sf_menu');
 add_action('admin_post_weadu_sf_csv', 'weadu_sf_download_csv');
 
@@ -65,12 +64,12 @@ function weadu_sf_render_page()
         wp_die(esc_html__('You cannot open this page.', 'weadu-shopping-feed'), 403);
     }
     $notice = '';
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['weadu_sf_settings'])) {
-        check_admin_referer('weadu_sf_settings');
+    if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['weadu_sf_settings'])) {
+        // weadu_sf_save_settings() verifies the nonce.
         $notice = weadu_sf_save_settings();
     }
     $report = null;
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['weadu_sf_check'])) {
+    if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['weadu_sf_check'])) {
         check_admin_referer('weadu_sf_settings');
         $report = WeaduFeedAudit::auditItems(weadu_sf_collect(weadu_sf_limit()));
     }
@@ -97,6 +96,7 @@ function weadu_sf_render_page()
 
 function weadu_sf_save_settings()
 {
+    check_admin_referer('weadu_sf_settings');
     $source = isset($_POST['weadu_sf_source']) ? sanitize_text_field(wp_unslash($_POST['weadu_sf_source'])) : '';
     $medium = isset($_POST['weadu_sf_medium']) ? sanitize_text_field(wp_unslash($_POST['weadu_sf_medium'])) : '';
     $campaign = isset($_POST['weadu_sf_campaign']) ? sanitize_text_field(wp_unslash($_POST['weadu_sf_campaign'])) : '';
@@ -298,7 +298,3 @@ function weadu_sf_declare_hpos()
     }
 }
 
-function weadu_sf_load_textdomain()
-{
-    load_plugin_textdomain('weadu-shopping-feed', false, dirname(plugin_basename(__FILE__)) . '/languages');
-}

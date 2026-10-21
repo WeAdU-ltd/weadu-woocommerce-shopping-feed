@@ -1,5 +1,6 @@
 <?php
 
+require __DIR__ . '/wp_parse_url.php';
 require __DIR__ . '/../weadu-shopping-feed/includes/FeedAudit.php';
 
 $fixtures = json_decode(file_get_contents(__DIR__ . '/fixtures.json'), true);
