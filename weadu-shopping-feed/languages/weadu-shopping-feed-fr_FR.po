@@ -1,0 +1,55 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: fr_FR\n"
+
+msgid "You cannot open this page."
+msgstr "Vous ne pouvez pas ouvrir cette page."
+
+msgid "WooCommerce has to be active."
+msgstr "WooCommerce doit être actif."
+
+msgid "The check runs in this admin. It does not call Google. Price is the price WooCommerce returns, and condition defaults to new when the product has no _condition meta. The id is the SKU, or the product id when the SKU is empty."
+msgstr "Le contrôle tourne dans cette administration. Il n'appelle pas Google. Le prix est celui que renvoie WooCommerce, et l'état vaut new si le produit n'a pas de meta _condition. L'identifiant est le SKU, ou l'id produit si le SKU est vide."
+
+msgid "Product limit (max 500)"
+msgstr "Nombre de produits (max 500)"
+
+msgid "Save settings"
+msgstr "Enregistrer"
+
+msgid "Run check"
+msgstr "Lancer le contrôle"
+
+msgid "UTM values were not saved. Use letters, digits, and . _ ~ - with no spaces."
+msgstr "Valeurs UTM non enregistrées. Lettres, chiffres, et . _ ~ - , sans espace."
+
+msgid "Settings saved."
+msgstr "Réglages enregistrés."
+
+msgid "Result"
+msgstr "Résultat"
+
+msgid "products"
+msgstr "produits"
+
+msgid "errors"
+msgstr "erreurs"
+
+msgid "warnings"
+msgstr "avertissements"
+
+msgid "Title"
+msgstr "Titre"
+
+msgid "Findings"
+msgstr "Constats"
+
+msgid "Suggested title"
+msgstr "Titre proposé"
+
+msgid "No finding"
+msgstr "Aucun constat"
+
+msgid "Download CSV"
+msgstr "Télécharger le CSV"
