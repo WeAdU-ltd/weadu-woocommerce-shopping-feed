@@ -113,3 +113,4 @@ function weadu_products()
 $GLOBALS['wp']['attachments'] = array(5 => 'https://shop.example/wp-content/uploads/shirt.jpg', 6 => 'https://shop.example/wp-content/uploads/socks.jpg');
 $GLOBALS['wp']['terms'] = array(11 => array((object) array('name' => 'Acme')));
 $GLOBALS['wp']['products'] = weadu_products();
+require_once __DIR__ . '/wp_parse_url.php';

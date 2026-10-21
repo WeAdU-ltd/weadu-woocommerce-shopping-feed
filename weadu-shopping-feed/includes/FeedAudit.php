@@ -192,7 +192,7 @@ public static function gtinIsValid($value)
             'term' => self::normalizeUtm(isset($input['term']) ? $input['term'] : '', 'term', false, $errors),
         );
 
-        $parts = $rawUrl === '' ? false : parse_url($rawUrl);
+        $parts = $rawUrl === '' ? false : wp_parse_url($rawUrl);
         if ($rawUrl !== '') {
             if ($parts === false || empty($parts['scheme'])) {
                 $errors[] = self::finding('url_invalid', 'error', 'url');
@@ -282,7 +282,8 @@ public static function gtinIsValid($value)
 
     public static function toCsv(array $report)
     {
-        $handle = fopen('php://temp', 'r+');
+        // In-memory stream for fputcsv(), no file on disk, so WP_Filesystem does not apply.
+        $handle = fopen('php://temp', 'r+'); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
         fputcsv($handle, array('id', 'title', 'severity', 'code', 'field', 'message', 'suggested_title'), ',', '"', '\\');
         foreach ($report['items'] as $item) {
             if (!$item['findings']) {
@@ -303,7 +304,7 @@ public static function gtinIsValid($value)
         }
         rewind($handle);
         $csv = stream_get_contents($handle);
-        fclose($handle);
+        fclose($handle); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
         return $csv;
     }
 
