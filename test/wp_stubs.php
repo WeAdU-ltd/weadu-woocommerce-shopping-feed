@@ -27,6 +27,21 @@ function add_submenu_page($parent, $pageTitle, $menuTitle, $cap, $slug, $callbac
 function current_user_can($cap) { return !empty($GLOBALS['wp']['caps'][$cap]); }
 function wp_die($message, $code = 500) { throw new WpDie($message, $code); }
 function esc_html($v) { return htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8'); }
+// Stand-in for WordPress gettext: a French locale reads the plugin's bundled fr_FR .po file.
+function __($v, $domain = "default") {
+    static $fr = null;
+    if (strpos($GLOBALS['wp']['locale'], 'fr') !== 0 || $domain !== 'weadu-shopping-feed') { return (string) $v; }
+    if ($fr === null) {
+        $fr = array();
+        $po = file_get_contents(__DIR__ . '/../weadu-shopping-feed/languages/weadu-shopping-feed-fr_FR.po');
+        preg_match_all('/msgid "((?:[^"\\\\]|\\\\.)*)"\nmsgstr "((?:[^"\\\\]|\\\\.)*)"/', $po, $m, PREG_SET_ORDER);
+        foreach ($m as $row) { if ($row[1] !== '') { $fr[stripcslashes($row[1])] = stripcslashes($row[2]); } }
+    }
+    return isset($fr[$v]) ? $fr[$v] : (string) $v;
+}
+function esc_html__($v, $domain = "default") { return esc_html(__($v, $domain)); }
+function plugin_basename($f) { return basename(dirname($f)) . "/" . basename($f); }
+function load_plugin_textdomain($d, $x = false, $p = "") { return true; }
 function esc_attr($v) { return htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8'); }
 function esc_url($v) { return htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8'); }
 function check_admin_referer($action) { $GLOBALS['wp']['nonces_checked'][] = $action; return 1; }

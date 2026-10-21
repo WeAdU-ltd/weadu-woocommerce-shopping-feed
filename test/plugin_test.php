@@ -13,7 +13,7 @@ preg_match('/\* Version: (\S+)/', $header, $v);
 preg_match('/Stable tag: (\S+)/', $readme, $s);
 check('plugin header has a version', !empty($v[1]));
 check('readme Stable tag matches the plugin version', isset($s[1]) && $s[1] === $v[1]);
-check('plugin header declares the MIT license', contains($header, 'License: MIT'));
+check('plugin header declares GPLv2 or later', contains($header, 'License: GPLv2 or later'));
 check('plugin header points to weadu.com', contains($header, 'Author URI: https://weadu.com'));
 check('readme declares a license', (bool) preg_match('/^License: /m', $readme));
 check('readme has Description, Installation, and Changelog', contains($readme, '== Description ==') && contains($readme, '== Installation ==') && contains($readme, '== Changelog =='));

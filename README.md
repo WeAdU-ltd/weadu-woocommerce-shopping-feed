@@ -79,7 +79,7 @@ sh test.sh   # PHP syntax check, shared logic tests, and plugin tests (PHP and N
 
 ## License
 
-[MIT](LICENSE)
+[GPLv2 or later](LICENSE)
 
 ## About
 
