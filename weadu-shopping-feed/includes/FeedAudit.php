@@ -1,4 +1,11 @@
 <?php
+/**
+ * WeAdU Shopping feed check
+ *
+ * @author    WeAdU <https://weadu.com>
+ * @copyright 2026 WeAdU
+ * @license   GPL-2.0-or-later https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
 /**
  * Local Google Shopping checks and UTM assembly.
@@ -257,17 +264,33 @@ public static function gtinIsValid($value)
         return array('ok' => true, 'url' => $url, 'errors' => array());
     }
 
+    /**
+     * Neutralize spreadsheet formulas: a cell starting with = + - @, tab or CR gets a leading quote.
+     */
+    public static function csvSafe(array $cells)
+    {
+        $out = array();
+        foreach ($cells as $cell) {
+            $cell = (string) $cell;
+            if ($cell !== '' && strpos("=+-@\t\r", $cell[0]) !== false) {
+                $cell = "'" . $cell;
+            }
+            $out[] = $cell;
+        }
+        return $out;
+    }
+
     public static function toCsv(array $report)
     {
         $handle = fopen('php://temp', 'r+');
-        fputcsv($handle, array('id', 'title', 'severity', 'code', 'field', 'message', 'suggested_title'));
+        fputcsv($handle, array('id', 'title', 'severity', 'code', 'field', 'message', 'suggested_title'), ',', '"', '\\');
         foreach ($report['items'] as $item) {
             if (!$item['findings']) {
-                fputcsv($handle, array($item['id'], $item['title'], '', '', '', '', $item['suggestedTitle']));
+                fputcsv($handle, self::csvSafe(array($item['id'], $item['title'], '', '', '', '', $item['suggestedTitle'])), ',', '"', '\\');
                 continue;
             }
             foreach ($item['findings'] as $row) {
-                fputcsv($handle, array(
+                fputcsv($handle, self::csvSafe(array(
                     $item['id'],
                     $item['title'],
                     $row['severity'],
@@ -275,7 +298,7 @@ public static function gtinIsValid($value)
                     $row['field'],
                     $row['message'],
                     $item['suggestedTitle'],
-                ));
+                )), ',', '"', '\\');
             }
         }
         rewind($handle);

@@ -6,7 +6,8 @@
  * Version: 1.0.0
  * Author: WeAdU
  * Author URI: https://weadu.com
- * License: MIT
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: weadu-shopping-feed
  * Requires Plugins: woocommerce
  * Requires at least: 6.2
@@ -20,6 +21,8 @@ if (!defined('ABSPATH')) {
 
 require_once __DIR__ . '/includes/FeedAudit.php';
 
+add_action('before_woocommerce_init', 'weadu_sf_declare_hpos');
+add_action('init', 'weadu_sf_load_textdomain');
 add_action('admin_menu', 'weadu_sf_menu');
 add_action('admin_post_weadu_sf_csv', 'weadu_sf_download_csv');
 
@@ -50,16 +53,16 @@ function weadu_sf_menu()
 function weadu_sf_missing_wc()
 {
     if (!current_user_can('manage_options')) {
-        wp_die(esc_html(weadu_sf_t('You cannot open this page.')), 403);
+        wp_die(esc_html__('You cannot open this page.', 'weadu-shopping-feed'), 403);
     }
     echo '<div class="wrap"><h1>WeAdU Shopping feed check</h1><p>'
-        . esc_html(weadu_sf_t('WooCommerce has to be active.')) . '</p></div>';
+        . esc_html__('WooCommerce has to be active.', 'weadu-shopping-feed') . '</p></div>';
 }
 
 function weadu_sf_render_page()
 {
     if (!current_user_can('manage_woocommerce')) {
-        wp_die(esc_html(weadu_sf_t('You cannot open this page.')), 403);
+        wp_die(esc_html__('You cannot open this page.', 'weadu-shopping-feed'), 403);
     }
     $notice = '';
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['weadu_sf_settings'])) {
@@ -75,16 +78,16 @@ function weadu_sf_render_page()
     if ($notice !== '') {
         echo '<div class="notice notice-info"><p>' . esc_html($notice) . '</p></div>';
     }
-    echo '<p>' . esc_html(weadu_sf_t('The check runs in this admin. It does not call Google. Price is the price WooCommerce returns, and condition defaults to new when the product has no _condition meta. The id is the SKU, or the product id when the SKU is empty.')) . '</p>';
+    echo '<p>' . esc_html__('The check runs in this admin. It does not call Google. Price is the price WooCommerce returns, and condition defaults to new when the product has no _condition meta. The id is the SKU, or the product id when the SKU is empty.', 'weadu-shopping-feed') . '</p>';
     echo '<form method="post">';
     wp_nonce_field('weadu_sf_settings');
     weadu_sf_field('weadu_sf_source', 'utm_source', (string) get_option('weadu_sf_source', ''));
     weadu_sf_field('weadu_sf_medium', 'utm_medium', (string) get_option('weadu_sf_medium', ''));
     weadu_sf_field('weadu_sf_campaign', 'utm_campaign', (string) get_option('weadu_sf_campaign', ''));
-    weadu_sf_field('weadu_sf_limit', weadu_sf_t('Product limit (max 500)'), (string) weadu_sf_limit());
-    submit_button(weadu_sf_t('Save settings'), 'secondary', 'weadu_sf_settings', false);
+    weadu_sf_field('weadu_sf_limit', __('Product limit (max 500)', 'weadu-shopping-feed'), (string) weadu_sf_limit());
+    submit_button(__('Save settings', 'weadu-shopping-feed'), 'secondary', 'weadu_sf_settings', false);
     echo ' ';
-    submit_button(weadu_sf_t('Run check'), 'primary', 'weadu_sf_check', false);
+    submit_button(__('Run check', 'weadu-shopping-feed'), 'primary', 'weadu_sf_check', false);
     echo '</form>';
     if (is_array($report)) {
         weadu_sf_render_report($report);
@@ -112,14 +115,14 @@ function weadu_sf_save_settings()
             'campaign' => $campaign,
         ));
         if (!$built['ok']) {
-            return weadu_sf_t('UTM values were not saved. Use letters, digits, and . _ ~ - with no spaces.');
+            return __('UTM values were not saved. Use letters, digits, and . _ ~ - with no spaces.', 'weadu-shopping-feed');
         }
     }
     update_option('weadu_sf_source', $source, false);
     update_option('weadu_sf_medium', $medium, false);
     update_option('weadu_sf_campaign', $campaign, false);
     update_option('weadu_sf_limit', (string) $limit, false);
-    return weadu_sf_t('Settings saved.');
+    return __('Settings saved.', 'weadu-shopping-feed');
 }
 
 function weadu_sf_limit()
@@ -242,38 +245,39 @@ function weadu_sf_render_report($report)
 {
     $iso = function_exists('determine_locale') ? determine_locale() : get_locale();
     $counts = $report['counts'];
-    echo '<h2>' . esc_html(weadu_sf_t('Result')) . '</h2>';
-    echo '<p>' . (int) $counts['items'] . ' ' . esc_html(weadu_sf_t('products')) . ', '
-        . (int) $counts['errors'] . ' ' . esc_html(weadu_sf_t('errors')) . ', '
-        . (int) $counts['warnings'] . ' ' . esc_html(weadu_sf_t('warnings')) . '.</p>';
-    echo '<table class="widefat striped"><thead><tr><th>id</th><th>' . esc_html(weadu_sf_t('Title'))
-        . '</th><th>' . esc_html(weadu_sf_t('Findings')) . '</th><th>'
-        . esc_html(weadu_sf_t('Suggested title')) . '</th></tr></thead><tbody>';
+    echo '<h2>' . esc_html__('Result', 'weadu-shopping-feed') . '</h2>';
+    echo '<p>' . (int) $counts['items'] . ' ' . esc_html__('products', 'weadu-shopping-feed') . ', '
+        . (int) $counts['errors'] . ' ' . esc_html__('errors', 'weadu-shopping-feed') . ', '
+        . (int) $counts['warnings'] . ' ' . esc_html__('warnings', 'weadu-shopping-feed') . '.</p>';
+    echo '<table class="widefat striped"><thead><tr><th>id</th><th>' . esc_html__('Title', 'weadu-shopping-feed')
+        . '</th><th>' . esc_html__('Findings', 'weadu-shopping-feed') . '</th><th>'
+        . esc_html__('Suggested title', 'weadu-shopping-feed') . '</th></tr></thead><tbody>';
     foreach ($report['items'] as $item) {
         $findings = array();
         foreach ($item['findings'] as $row) {
             $findings[] = $row['severity'] . ': ' . WeaduFeedAudit::label($row['code'], $iso);
         }
         echo '<tr><td>' . esc_html($item['id']) . '</td><td>' . esc_html($item['title']) . '</td><td>'
-            . esc_html($findings ? implode('; ', $findings) : weadu_sf_t('No finding')) . '</td><td>'
+            . esc_html($findings ? implode('; ', $findings) : __('No finding', 'weadu-shopping-feed')) . '</td><td>'
             . esc_html($item['suggestedTitle']) . '</td></tr>';
     }
     echo '</tbody></table>';
     $url = wp_nonce_url(admin_url('admin-post.php?action=weadu_sf_csv'), 'weadu_sf_csv');
-    echo '<p><a class="button" href="' . esc_url($url) . '">' . esc_html(weadu_sf_t('Download CSV')) . '</a></p>';
+    echo '<p><a class="button" href="' . esc_url($url) . '">' . esc_html__('Download CSV', 'weadu-shopping-feed') . '</a></p>';
 }
 
 function weadu_sf_download_csv()
 {
     if (!current_user_can('manage_woocommerce')) {
-        wp_die(esc_html(weadu_sf_t('You cannot open this page.')), 403);
+        wp_die(esc_html__('You cannot open this page.', 'weadu-shopping-feed'), 403);
     }
     check_admin_referer('weadu_sf_csv');
     $report = WeaduFeedAudit::auditItems(weadu_sf_collect(weadu_sf_limit()));
     nocache_headers();
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="weadu-shopping-feed.csv"');
-    echo WeaduFeedAudit::toCsv($report);
+    // CSV body, not HTML: cells are neutralized against formula injection in WeaduFeedAudit::toCsv().
+    echo WeaduFeedAudit::toCsv($report); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     exit;
 }
 
@@ -284,30 +288,17 @@ function weadu_sf_field($name, $label, $value)
         . esc_attr($value) . '" /></p>';
 }
 
-function weadu_sf_t($english)
+/**
+ * Declare compatibility with WooCommerce High-Performance Order Storage (the plugin reads products only).
+ */
+function weadu_sf_declare_hpos()
 {
-    $locale = function_exists('determine_locale') ? determine_locale() : (function_exists('get_locale') ? get_locale() : 'en');
-    if (strpos($locale, 'fr') !== 0) {
-        return $english;
+    if (class_exists('\\Automattic\\WooCommerce\\Utilities\\FeaturesUtil')) {
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true);
     }
-    $fr = array(
-        'You cannot open this page.' => 'Vous ne pouvez pas ouvrir cette page.',
-        'WooCommerce has to be active.' => 'WooCommerce doit être actif.',
-        'The check runs in this admin. It does not call Google. Price is the price WooCommerce returns, and condition defaults to new when the product has no _condition meta. The id is the SKU, or the product id when the SKU is empty.' => 'Le contrôle tourne dans cette administration. Il n\'appelle pas Google. Le prix est celui que renvoie WooCommerce, et l\'état vaut new si le produit n\'a pas de meta _condition. L\'identifiant est le SKU, ou l\'id produit si le SKU est vide.',
-        'Product limit (max 500)' => 'Nombre de produits (max 500)',
-        'Save settings' => 'Enregistrer',
-        'Run check' => 'Lancer le contrôle',
-        'UTM values were not saved. Use letters, digits, and . _ ~ - with no spaces.' => 'Valeurs UTM non enregistrées. Lettres, chiffres, et . _ ~ - , sans espace.',
-        'Settings saved.' => 'Réglages enregistrés.',
-        'Result' => 'Résultat',
-        'products' => 'produits',
-        'errors' => 'erreurs',
-        'warnings' => 'avertissements',
-        'Title' => 'Titre',
-        'Findings' => 'Constats',
-        'Suggested title' => 'Titre proposé',
-        'No finding' => 'Aucun constat',
-        'Download CSV' => 'Télécharger le CSV',
-    );
-    return isset($fr[$english]) ? $fr[$english] : $english;
+}
+
+function weadu_sf_load_textdomain()
+{
+    load_plugin_textdomain('weadu-shopping-feed', false, dirname(plugin_basename(__FILE__)) . '/languages');
 }

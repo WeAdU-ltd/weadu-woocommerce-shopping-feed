@@ -1,4 +1,9 @@
 <?php
+/**
+ * WeAdU Shopping Feed Check
+ *
+ * @license GPL-2.0-or-later https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');

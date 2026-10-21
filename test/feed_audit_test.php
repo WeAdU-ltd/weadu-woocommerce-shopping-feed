@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/FeedAudit.php';
+require __DIR__ . '/../weadu-shopping-feed/includes/FeedAudit.php';
 
 $fixtures = json_decode(file_get_contents(__DIR__ . '/fixtures.json'), true);
 $failed = 0;
