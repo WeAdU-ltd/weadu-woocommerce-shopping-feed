@@ -80,9 +80,6 @@ function weadu_sf_render_page()
     echo '<p>' . esc_html__('The check runs in this admin. It does not call Google. Price is the price WooCommerce returns, and condition defaults to new when the product has no _condition meta. The id is the SKU, or the product id when the SKU is empty.', 'weadu-shopping-feed') . '</p>';
     echo '<form method="post">';
     wp_nonce_field('weadu_sf_settings');
-    weadu_sf_field('weadu_sf_source', 'utm_source', (string) get_option('weadu_sf_source', ''));
-    weadu_sf_field('weadu_sf_medium', 'utm_medium', (string) get_option('weadu_sf_medium', ''));
-    weadu_sf_field('weadu_sf_campaign', 'utm_campaign', (string) get_option('weadu_sf_campaign', ''));
     weadu_sf_field('weadu_sf_limit', __('Product limit (max 500)', 'weadu-shopping-feed'), (string) weadu_sf_limit());
     submit_button(__('Save settings', 'weadu-shopping-feed'), 'secondary', 'weadu_sf_settings', false);
     echo ' ';
@@ -97,9 +94,6 @@ function weadu_sf_render_page()
 function weadu_sf_save_settings()
 {
     check_admin_referer('weadu_sf_settings');
-    $source = isset($_POST['weadu_sf_source']) ? sanitize_text_field(wp_unslash($_POST['weadu_sf_source'])) : '';
-    $medium = isset($_POST['weadu_sf_medium']) ? sanitize_text_field(wp_unslash($_POST['weadu_sf_medium'])) : '';
-    $campaign = isset($_POST['weadu_sf_campaign']) ? sanitize_text_field(wp_unslash($_POST['weadu_sf_campaign'])) : '';
     $limit = isset($_POST['weadu_sf_limit']) ? (int) $_POST['weadu_sf_limit'] : 200;
     if ($limit < 1) {
         $limit = 200;
@@ -107,20 +101,6 @@ function weadu_sf_save_settings()
     if ($limit > 500) {
         $limit = 500;
     }
-    if ($source !== '' || $medium !== '' || $campaign !== '') {
-        $built = WeaduFeedAudit::buildUtmUrl(array(
-            'url' => 'https://example.com/',
-            'source' => $source,
-            'medium' => $medium,
-            'campaign' => $campaign,
-        ));
-        if (!$built['ok']) {
-            return __('UTM values were not saved. Use letters, digits, and . _ ~ - with no spaces.', 'weadu-shopping-feed');
-        }
-    }
-    update_option('weadu_sf_source', $source, false);
-    update_option('weadu_sf_medium', $medium, false);
-    update_option('weadu_sf_campaign', $campaign, false);
     update_option('weadu_sf_limit', (string) $limit, false);
     return __('Settings saved.', 'weadu-shopping-feed');
 }
@@ -149,20 +129,17 @@ function weadu_sf_collect($limit)
     if (!is_array($products)) {
         return array();
     }
-    $source = trim((string) get_option('weadu_sf_source', ''));
-    $medium = trim((string) get_option('weadu_sf_medium', ''));
-    $campaign = trim((string) get_option('weadu_sf_campaign', ''));
     $currency = function_exists('get_woocommerce_currency') ? get_woocommerce_currency() : '';
     $items = array();
     foreach ($products as $product) {
         if ($product instanceof WC_Product) {
-            $items[] = weadu_sf_map_product($product, $currency, $source, $medium, $campaign);
+            $items[] = weadu_sf_map_product($product, $currency);
         }
     }
     return $items;
 }
 
-function weadu_sf_map_product($product, $currency, $source, $medium, $campaign)
+function weadu_sf_map_product($product, $currency)
 {
     $sku = trim((string) $product->get_sku());
     $id = $sku !== '' ? $sku : (string) $product->get_id();
@@ -197,17 +174,6 @@ function weadu_sf_map_product($product, $currency, $source, $medium, $campaign)
         }
     }
     $link = (string) $product->get_permalink();
-    if ($source !== '' && $medium !== '' && $campaign !== '' && $link !== '') {
-        $built = WeaduFeedAudit::buildUtmUrl(array(
-            'url' => $link,
-            'source' => $source,
-            'medium' => $medium,
-            'campaign' => $campaign,
-        ));
-        if ($built['ok']) {
-            $link = $built['url'];
-        }
-    }
     $condition = trim((string) $product->get_meta('_condition', true));
     if ($condition === '') {
         $condition = 'new';

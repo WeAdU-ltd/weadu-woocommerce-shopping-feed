@@ -1,3 +1,10 @@
+> **Archived project.** This repository is no longer maintained and will not be published to any store. Free tools already cover this need better:
+>
+> - [Ordlo Catalog Audit](https://wordpress.org/plugins/ordlo-catalog-audit/)
+> - [Merchant Feed Booster Lite for WooCommerce](https://wordpress.org/plugins/merchant-feed-booster-lite-for-woocommerce/)
+>
+> The code stays available under its license, as is.
+
 # WeAdU Shopping Feed Check (WooCommerce plugin)
 
 A free WordPress plugin for WooCommerce that checks the product fields a Google Shopping feed uses (title, description, link, image, availability, price, brand, GTIN, condition) and lists, product by product, what to fix before you send a feed to Merchant Center.
@@ -10,7 +17,6 @@ The WordPress.org listing text is in [`weadu-shopping-feed/readme.txt`](weadu-sh
 
 - Reads published products, up to a limit you choose (200 by default, 500 at most).
 - Lists each product with its findings (errors and warnings) and a suggested title when the brand is missing from the title.
-- Optional UTM parameters: when `utm_source`, `utm_medium`, and `utm_campaign` are all set, they are added to the product links that are checked.
 - CSV export of the result.
 - Interface in English and French (follows the WordPress locale).
 - Available to users with the `manage_woocommerce` capability.
@@ -22,7 +28,7 @@ The WordPress.org listing text is in [`weadu-shopping-feed/readme.txt`](weadu-sh
 | `id` | SKU, or the product ID when the SKU is empty |
 | `title` | Product name |
 | `description` | Description, or the short description when it is empty |
-| `link` | Product permalink (with UTM parameters if they are set) |
+| `link` | Product permalink |
 | `image_link` | Featured image |
 | `availability` | `in_stock` or `out_of_stock` |
 | `price` | Price returned by WooCommerce, with the store currency |
@@ -54,7 +60,7 @@ WordPress 6.2 or later, PHP 7.4 or later, WooCommerce 8.0 or later (as declared 
 
 ## Usage
 
-1. Optional: enter `utm_source`, `utm_medium`, `utm_campaign`, and a product limit, then click **Save settings**. UTM values may contain letters, digits, and `. _ ~ -`, with no spaces.
+1. Optional: enter a product limit, then click **Save settings**.
 2. Click **Run check**.
 3. Read the table, or click **Download CSV**.
 

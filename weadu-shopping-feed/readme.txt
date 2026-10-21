@@ -31,7 +31,7 @@ Warnings:
 * empty GTIN and MPN;
 * empty or unknown condition.
 
-It also suggests a title that starts with the brand when the brand is missing from the title, can add your UTM parameters to the links it checks, and exports the result as a CSV file. The interface is in English and French.
+It also suggests a title that starts with the brand when the brand is missing from the title, and exports the result as a CSV file. The interface is in English and French.
 
 A product with no finding is not an approval from Google: Merchant Center applies many more rules.
 
@@ -48,14 +48,14 @@ A product with no finding is not an approval from Google: Merchant Center applie
 
 = Privacy =
 
-The plugin reads your products in your own wp-admin and shows the result there. It does not call Google, Merchant Center, or any other service, sends no data, and has no telemetry. It does not modify your products. It stores four options: the three UTM values and the product limit.
+The plugin reads your products in your own wp-admin and shows the result there. It does not call Google, Merchant Center, or any other service, sends no data, and has no telemetry. It does not modify your products. It stores one option: the product limit.
 
 == Installation ==
 
 1. Upload the `weadu-shopping-feed` folder to `wp-content/plugins/`, or install the ZIP from Plugins → Add New Plugin → Upload Plugin.
 2. Activate WooCommerce, then activate WeAdU Shopping Feed Check.
 3. Open WooCommerce → Shopping feed check.
-4. Optional: enter utm_source, utm_medium, utm_campaign, and a product limit (200 by default, 500 at most), then click Save settings.
+4. Optional: enter a product limit (200 by default, 500 at most), then click Save settings.
 5. Click Run check.
 
 == Frequently Asked Questions ==
@@ -79,4 +79,4 @@ No. The check reads the main products returned by WooCommerce, not each variatio
 == Changelog ==
 
 = 1.0.0 =
-* First release: product check, UTM parameters, CSV export, English and French interface.
+* First release: product check, CSV export, English and French interface.
